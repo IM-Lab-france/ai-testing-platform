@@ -1,0 +1,27 @@
+# Utiliser une image de base officielle de Node.js
+FROM node:14-alpine
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le fichier package.json et installer les dépendances
+COPY frontend/package*.json ./
+
+# Installer les dépendances
+RUN npm install
+
+# Copier le reste de l'application
+COPY frontend/public /app/public
+COPY frontend/src /app/src
+COPY frontend/tests /app/tests
+COPY frontend/.eslintrc /app/.eslintrc
+COPY frontend/.eslintignore /app/.eslintignore
+
+# Construire l'application React
+RUN npm run build
+
+# Exposer le port sur lequel l'application va tourner
+EXPOSE 3000
+
+# Commande pour démarrer l'application React
+CMD ["npm", "start"]
